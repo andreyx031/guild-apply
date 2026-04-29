@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guild Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #7a5e28;
+    --bg: #0a0b0e;
+    --bg2: #111318;
+    --bg3: #181c24;
+    --border: #2a2e3a;
+    --border-gold: #3a2e18;
+    --text: #d4cfc4;
+    --text-dim: #7a7568;
+    --text-bright: #ede8df;
+    --purple: #6b4fa0;
+    --purple-light: #9b7fd0;
+    --red: #9b3a3a;
+    --red-light: #c05050;
+    --green: #3a7a50;
+    --green-light: #5aaa70;
+  }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(107,79,160,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.06) 0%, transparent 50%);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  /* LANG SCREEN */
+  .lang-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .lang-emblem {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: var(--gold);
+    position: relative;
+  }
+  .lang-emblem::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+
+  .lang-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-shadow: 0 0 40px rgba(201,168,76,0.3);
+  }
+  .lang-subtitle {
+    font-size: 16px;
+    color: var(--text-dim);
+    text-align: center;
+    font-style: italic;
+    margin-top: -1.5rem;
+  }
+
+  .lang-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .lang-btn {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: 'Crimson Pro', serif;
+    color: var(--text);
+  }
+  .lang-btn:hover {
+    border-color: var(--gold-dim);
+    background: var(--bg3);
+    transform: translateY(-2px);
+  }
+  .lang-btn .flag { font-size: 32px; display: block; margin-bottom: 8px; }
+  .lang-btn .lang-name { font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 0.06em; color: var(--text-bright); }
+  .lang-btn .lang-native { font-size: 13px; color: var(--text-dim); font-style: italic; margin-top: 2px; }
+
+  /* FORM */
+  .form-screen { display: none; animation: fadeUp 0.5s ease both; }
+
+  .form-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .form-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .header-emblem {
+    width: 48px; height: 48px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+  .form-title { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; color: var(--gold); letter-spacing: 0.05em; }
+  .form-subtitle { font-size: 14px; color: var(--text-dim); font-style: italic; margin-top: 2px; }
+  .lang-switch { margin-left: auto; background: none; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; color: var(--text-dim); font-size: 12px; cursor: pointer; font-family: 'Crimson Pro', serif; transition: all 0.15s; }
+  .lang-switch:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  .section { margin-bottom: 1.75rem; }
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text-bright);
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    transition: border-color 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--gold-dim); }
+  input[type="text"]::placeholder, textarea::placeholder { color: var(--text-dim); font-style: italic; }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a5e28' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  select option { background: var(--bg2); }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ROLE CARDS */
+  .role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .role-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .role-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .role-card:hover { border-color: var(--border-gold); background: var(--bg3); }
+  .role-card.selected { border-color: var(--gold-dim); background: rgba(201,168,76,0.05); }
+  .role-card.selected::before { background: var(--gold); }
+  .role-icon { font-size: 18px; margin-bottom: 4px; display: block; }
+  .role-name { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.04em; color: var(--text-bright); }
+  .role-card.selected .role-name { color: var(--gold-light); }
+  .role-desc { font-size: 12px; color: var(--text-dim); margin-top: 2px; font-style: italic; }
+
+  /* SPEC CARDS */
+  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .spec-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .spec-card:hover { border-color: var(--border-gold); }
+  .spec-card.selected { border-color: var(--gold-dim); background: rgba(201,168,76,0.05); }
+  .spec-icon { font-size: 20px; display: block; margin-bottom: 3px; }
+  .spec-name { font-size: 11px; font-family: 'Cinzel', serif; color: var(--text-dim); letter-spacing: 0.03em; }
+  .spec-card.selected .spec-name { color: var(--gold); }
+
+  /* CONDITIONAL BLOCK */
+  .cond-block {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold-dim);
+    border-radius: 0 8px 8px 0;
+    animation: fadeUp 0.25s ease both;
+  }
+  .cond-block.visible { display: block; }
+  .cond-label { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; font-style: italic; }
+
+  /* SUBMIT */
+  .submit-area { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #8b6914, #c9a84c, #8b6914);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: #0a0b0e;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-position 0.4s ease;
+  }
+  .submit-btn:hover { background-position: 0 0; }
+
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 3rem 1rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  .success-icon { font-size: 48px; margin-bottom: 1rem; }
+  .success-title { font-family: 'Cinzel', serif; font-size: 22px; color: var(--gold); margin-bottom: 0.75rem; }
+  .success-text { font-size: 16px; color: var(--text-dim); font-style: italic; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .field-gap { margin-bottom: 12px; }
+  .field-label { font-size: 13px; color: var(--text-dim); margin-bottom: 5px; display: block; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- LANG SCREEN -->
+  <div class="lang-screen" id="lang-screen">
+    <div class="lang-emblem">⚔</div>
+    <div>
+      <div class="lang-title">GUILD APPLICATION</div>
+      <div class="lang-subtitle">Choose your language / Alege limba</div>
+    </div>
+    <div class="lang-grid">
+      <button class="lang-btn" onclick="setLang('ro')">
+        <span class="flag">🇷🇴</span>
+        <div class="lang-name">ROMÂNĂ</div>
+        <div class="lang-native">Română</div>
+      </button>
+      <button class="lang-btn" onclick="setLang('en')">
+        <span class="flag">🇬🇧</span>
+        <div class="lang-name">ENGLISH</div>
+        <div class="lang-native">English</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- FORM SCREEN -->
+  <div class="form-screen" id="form-screen">
+    <div class="form-header">
+      <div class="header-emblem">⚔</div>
+      <div>
+        <div class="form-title" data-t="formTitle">APLICAȚIE GUILDĂ</div>
+        <div class="form-subtitle" data-t="formSubtitle">Completează cu sinceritate</div>
+      </div>
+      <button class="lang-switch" onclick="goBack()" data-t="switchLang">🌐 Schimbă limba</button>
+    </div>
+
+    <!-- CHARACTER INFO -->
+    <div class="section">
+      <div class="section-label" data-t="sectionChar">Informații personaj</div>
+      <div class="input-row field-gap">
+        <div>
+          <label class="field-label" data-t="labelCharName">Numele personajului</label>
+          <input type="text" id="char-name" data-ph="charNamePh" placeholder="ex. Andromethis-Sylvanas" />
+        </div>
+        <div>
+          <label class="field-label" data-t="labelServer">Server / Realm</label>
+          <input type="text" id="char-server" data-ph="serverPh" placeholder="ex. Sylvanas-EU" />
+        </div>
+      </div>
+      <div class="input-row field-gap">
+        <div>
+          <label class="field-label" data-t="labelClass">Clasă</label>
+          <input type="text" id="char-class" data-ph="classPh" placeholder="ex. Paladin" />
+        </div>
+        <div>
+          <label class="field-label" data-t="labelIlvl">Item Level</label>
+          <input type="text" id="char-ilvl" data-ph="ilvlPh" placeholder="ex. 645" />
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEC / ROLE -->
+    <div class="section">
+      <div class="section-label" data-t="sectionSpec">Spec & Rol</div>
+      <div class="field-gap">
+        <label class="field-label" data-t="labelSpec">Spec principal</label>
+        <div class="input-row field-gap">
+          <div>
+            <input type="text" id="char-spec" data-ph="specPh" placeholder="ex. Retribution" />
+          </div>
+          <div>
+            <select id="char-role" onchange="updateCondBlocks()">
+              <option value="" data-t-opt="roleSelect">— selectează rolul —</option>
+              <option value="tank" data-t-opt="roleTank">🛡 Tank</option>
+              <option value="healer" data-t-opt="roleHealer">💚 Healer</option>
+              <option value="dps" data-t-opt="roleDPS">⚔ DPS</option>
+              <option value="flex" data-t-opt="roleFlex">🔄 Flex (mai multe)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYER TYPE -->
+    <div class="section">
+      <div class="section-label" data-t="sectionType">Tip de jucător</div>
+      <div class="role-grid" id="role-grid">
+        <div class="role-card" data-role="casual" onclick="selectRole(this)">
+          <span class="role-icon">🍺</span>
+          <div class="role-name" data-t="roleCasualName">Casual / Social</div>
+          <div class="role-desc" data-t="roleCasualDesc">Joc pentru distracție</div>
+        </div>
+        <div class="role-card" data-role="heroic" onclick="selectRole(this)">
+          <span class="role-icon">🏆</span>
+          <div class="role-name" data-t="roleHeroicName">Heroic Raider</div>
+          <div class="role-desc" data-t="roleHeroicDesc">Clear heroic consistent</div>
+        </div>
+        <div class="role-card" data-role="mythic" onclick="selectRole(this)">
+          <span class="role-icon">💀</span>
+          <div class="role-name" data-t="roleMythicName">Mythic Raider</div>
+          <div class="role-desc" data-t="roleMythicDesc">Progress mythic e prioritatea</div>
+        </div>
+        <div class="role-card" data-role="pvp" onclick="selectRole(this)">
+          <span class="role-icon">⚔️</span>
+          <div class="role-name" data-t="rolePvpName">PvP</div>
+          <div class="role-desc" data-t="rolePvpDesc">Arena, RBG, World PvP</div>
+        </div>
+        <div class="role-card" data-role="mplus" onclick="selectRole(this)">
+          <span class="role-icon">🗝️</span>
+          <div class="role-name" data-t="roleMplusName">Mythic+ Tryhard</div>
+          <div class="role-desc" data-t="roleMplusDesc">Dungeons la nivel înalt</div>
+        </div>
+        <div class="role-card" data-role="all" onclick="selectRole(this)">
+          <span class="role-icon">🌟</span>
+          <div class="role-name" data-t="roleAllName">All-around</div>
+          <div class="role-desc" data-t="roleAllDesc">Raid + M+ + PvP</div>
+        </div>
+      </div>
+
+      <!-- CONDITIONAL BLOCKS -->
+      <div class="cond-block" id="block-heroic">
+        <div class="field-gap">
+          <label class="field-label" data-t="heroicQ1">Ce raid-uri ai cleared pe Heroic? (tier curent + ultimele 2)</label>
+          <textarea id="exp-heroic" data-ph="heroicPh" placeholder="ex. 8/8 HC Nerub-ar, 3/8 HC Undermine..."></textarea>
+        </div>
+        <div>
+          <label class="field-label" data-t="heroicQ2">Ai experiență cu raid leading / callouts?</label>
+          <select id="heroic-lead">
+            <option value="" data-t-opt="selectOpt">— selectează —</option>
+            <option data-t-opt="heroicLead1">Da, am leading experience</option>
+            <option data-t-opt="heroicLead2">Uneori fac callouts</option>
+            <option data-t-opt="heroicLead3">Nu, prefer să urmez</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cond-block" id="block-mythic">
+        <div class="field-gap">
+          <label class="field-label" data-t="mythicQ1">Progres Mythic actual + CE-uri anterioare</label>
+          <textarea id="exp-mythic" data-ph="mythicPh" placeholder="ex. 4/8M Nerub-ar, CE Aberrus..."></textarea>
+        </div>
+        <div class="field-gap">
+          <label class="field-label" data-t="mythicQ2">WarcraftLogs link (opțional)</label>
+          <input type="text" id="logs-link" placeholder="https://www.warcraftlogs.com/..." />
+        </div>
+        <div>
+          <label class="field-label" data-t="mythicQ3">Disponibilitate pentru raid schedule</label>
+          <select id="mythic-sched">
+            <option value="" data-t-opt="selectOpt">— selectează —</option>
+            <option data-t-opt="mythicSched1">Pot veni la toate raid-urile</option>
+            <option data-t-opt="mythicSched2">Lipsesc max 1-2 ori/lună</option>
+            <option data-t-opt="mythicSched3">Am program variabil</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cond-block" id="block-pvp">
+        <div class="field-gap">
+          <label class="field-label" data-t="pvpQ1">Format preferat</label>
+          <select id="pvp-format">
+            <option value="" data-t-opt="selectOpt">— selectează —</option>
+            <option data-t-opt="pvpFormat1">2v2 Arena</option>
+            <option data-t-opt="pvpFormat2">3v3 Arena</option>
+            <option data-t-opt="pvpFormat3">RBG / Battlegrounds</option>
+            <option data-t-opt="pvpFormat4">World PvP / Warmode</option>
+            <option data-t-opt="pvpFormat5">Toate formatele</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" data-t="pvpQ2">Cel mai înalt rating atins</label>
+          <input type="text" id="pvp-rating" data-ph="pvpRatingPh" placeholder="ex. 2100 CR în 3v3, Duelist S3" />
+        </div>
+      </div>
+
+      <div class="cond-block" id="block-mplus">
+        <div class="field-gap">
+          <label class="field-label" data-t="mplusQ1">Raider.IO score + highest key completat</label>
+          <input type="text" id="mplus-score" data-ph="mplusScorePh" placeholder="ex. 2800 IO, +22 Cinderbrew" />
+        </div>
+        <div>
+          <label class="field-label" data-t="mplusQ2">Rol principal în M+</label>
+          <select id="mplus-role">
+            <option value="" data-t-opt="selectOpt">— selectează —</option>
+            <option data-t-opt="mplusRole1">Tank</option>
+            <option data-t-opt="mplusRole2">Healer</option>
+            <option data-t-opt="mplusRole3">DPS</option>
+            <option data-t-opt="mplusRole4">Flex (pot juca mai multe)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cond-block" id="block-all">
+        <div>
+          <label class="field-label" data-t="allQ1">Descrie-ți activitatea (raid progres, IO, rating PvP etc.)</label>
+          <textarea id="exp-all" data-ph="allPh" placeholder="Spune-ne tot ce consideri relevant..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOTIVATION -->
+    <div class="section">
+      <div class="section-label" data-t="sectionMotiv">Motivație</div>
+      <div class="field-gap">
+        <label class="field-label" data-t="labelMotiv">De ce vrei să te alături guildei?</label>
+        <textarea id="motivation" data-ph="motivPh" placeholder="Spune-ne câteva cuvinte despre ce cauți..." style="min-height:100px;"></textarea>
+      </div>
+      <div class="field-gap">
+        <label class="field-label" data-t="labelContact">BattleTag / Discord (pentru contact)</label>
+        <input type="text" id="btag" data-ph="contactPh" placeholder="ex. Andrei#1234 sau andrei_wow" />
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button class="submit-btn" onclick="submitApp()" data-t="submitBtn">TRIMITE APLICAȚIA</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">⚔️</div>
+    <div class="success-title" data-t="successTitle">Aplicație trimisă!</div>
+    <div class="success-text" data-t="successText">GM-ul te va contacta în curând. Spor la farm până atunci!</div>
+  </div>
+
+</div>
+
+<script>
+const T = {
+  ro: {
+    formTitle: "APLICAȚIE GUILDĂ",
+    formSubtitle: "Completează cu sinceritate",
+    switchLang: "🌐 Schimbă limba",
+    sectionChar: "Informații personaj",
+    labelCharName: "Numele personajului",
+    charNamePh: "ex. Andromethis-Sylvanas",
+    labelServer: "Server / Realm",
+    serverPh: "ex. Sylvanas-EU",
+    labelClass: "Clasă",
+    classPh: "ex. Paladin",
+    labelIlvl: "Item Level",
+    ilvlPh: "ex. 645",
+    sectionSpec: "Spec & Rol",
+    labelSpec: "Spec principal",
+    specPh: "ex. Retribution",
+    roleSelect: "— selectează rolul —",
+    roleTank: "🛡 Tank",
+    roleHealer: "💚 Healer",
+    roleDPS: "⚔ DPS",
+    roleFlex: "🔄 Flex (mai multe)",
+    sectionType: "Tip de jucător",
+    roleCasualName: "Casual / Social", roleCasualDesc: "Joc pentru distracție",
+    roleHeroicName: "Heroic Raider", roleHeroicDesc: "Clear heroic consistent",
+    roleMythicName: "Mythic Raider", roleMythicDesc: "Progress mythic e prioritatea",
+    rolePvpName: "PvP", rolePvpDesc: "Arena, RBG, World PvP",
+    roleMplusName: "Mythic+ Tryhard", roleMplusDesc: "Dungeons la nivel înalt",
+    roleAllName: "All-around", roleAllDesc: "Raid + M+ + PvP",
+    heroicQ1: "Ce raid-uri ai cleared pe Heroic? (tier curent + ultimele 2)",
+    heroicPh: "ex. 8/8 HC Nerub-ar, 3/8 HC Undermine...",
+    heroicQ2: "Ai experiență cu raid leading / callouts?",
+    selectOpt: "— selectează —",
+    heroicLead1: "Da, am leading experience", heroicLead2: "Uneori fac callouts", heroicLead3: "Nu, prefer să urmez",
+    mythicQ1: "Progres Mythic actual + CE-uri anterioare",
+    mythicPh: "ex. 4/8M Nerub-ar, CE Aberrus...",
+    mythicQ2: "WarcraftLogs link (opțional)",
+    mythicQ3: "Disponibilitate pentru raid schedule",
+    mythicSched1: "Pot veni la toate raid-urile", mythicSched2: "Lipsesc max 1-2 ori/lună", mythicSched3: "Am program variabil",
+    pvpQ1: "Format preferat", pvpQ2: "Cel mai înalt rating atins",
+    pvpFormat1: "2v2 Arena", pvpFormat2: "3v3 Arena", pvpFormat3: "RBG / Battlegrounds", pvpFormat4: "World PvP / Warmode", pvpFormat5: "Toate formatele",
+    pvpRatingPh: "ex. 2100 CR în 3v3, Duelist S3",
+    mplusQ1: "Raider.IO score + highest key completat",
+    mplusScorePh: "ex. 2800 IO, +22 Cinderbrew",
+    mplusQ2: "Rol principal în M+",
+    mplusRole1: "Tank", mplusRole2: "Healer", mplusRole3: "DPS", mplusRole4: "Flex (pot juca mai multe)",
+    allQ1: "Descrie-ți activitatea (raid progres, IO, rating PvP etc.)",
+    allPh: "Spune-ne tot ce consideri relevant...",
+    sectionMotiv: "Motivație",
+    labelMotiv: "De ce vrei să te alături guildei?",
+    motivPh: "Spune-ne câteva cuvinte despre ce cauți...",
+    labelContact: "BattleTag / Discord (pentru contact)",
+    contactPh: "ex. Andrei#1234 sau andrei_wow",
+    submitBtn: "TRIMITE APLICAȚIA",
+    successTitle: "Aplicație trimisă!",
+    successText: "GM-ul te va contacta în curând. Spor la farm până atunci!",
+    alertMsg: "Completează cel puțin numele personajului și tipul de jucător."
+  },
+  en: {
+    formTitle: "GUILD APPLICATION",
+    formSubtitle: "Be honest, we'll notice",
+    switchLang: "🌐 Change language",
+    sectionChar: "Character info",
+    labelCharName: "Character name",
+    charNamePh: "e.g. Andromethis-Sylvanas",
+    labelServer: "Server / Realm",
+    serverPh: "e.g. Sylvanas-EU",
+    labelClass: "Class",
+    classPh: "e.g. Paladin",
+    labelIlvl: "Item Level",
+    ilvlPh: "e.g. 645",
+    sectionSpec: "Spec & Role",
+    labelSpec: "Main spec",
+    specPh: "e.g. Retribution",
+    roleSelect: "— select role —",
+    roleTank: "🛡 Tank",
+    roleHealer: "💚 Healer",
+    roleDPS: "⚔ DPS",
+    roleFlex: "🔄 Flex (multiple)",
+    sectionType: "Player type",
+    roleCasualName: "Casual / Social", roleCasualDesc: "Playing for fun",
+    roleHeroicName: "Heroic Raider", roleHeroicDesc: "Consistent heroic clears",
+    roleMythicName: "Mythic Raider", roleMythicDesc: "Mythic progress is my priority",
+    rolePvpName: "PvP", rolePvpDesc: "Arena, RBG, World PvP",
+    roleMplusName: "Mythic+ Tryhard", roleMplusDesc: "High-level dungeon pushing",
+    roleAllName: "All-around", roleAllDesc: "Raid + M+ + PvP",
+    heroicQ1: "Which raids have you cleared on Heroic? (current + last 2 tiers)",
+    heroicPh: "e.g. 8/8 HC Nerub-ar, 3/8 HC Undermine...",
+    heroicQ2: "Do you have raid leading / callout experience?",
+    selectOpt: "— select —",
+    heroicLead1: "Yes, I have leading experience", heroicLead2: "I sometimes make callouts", heroicLead3: "No, I prefer to follow",
+    mythicQ1: "Current Mythic progress + previous CEs",
+    mythicPh: "e.g. 4/8M Nerub-ar, CE Aberrus...",
+    mythicQ2: "WarcraftLogs link (optional)",
+    mythicQ3: "Availability for raid schedule",
+    mythicSched1: "Can attend all raids", mythicSched2: "Miss max 1-2 per month", mythicSched3: "Variable schedule",
+    pvpQ1: "Preferred format", pvpQ2: "Highest rating achieved",
+    pvpFormat1: "2v2 Arena", pvpFormat2: "3v3 Arena", pvpFormat3: "RBG / Battlegrounds", pvpFormat4: "World PvP / Warmode", pvpFormat5: "All formats",
+    pvpRatingPh: "e.g. 2100 CR in 3v3, Duelist S3",
+    mplusQ1: "Raider.IO score + highest key completed",
+    mplusScorePh: "e.g. 2800 IO, +22 Cinderbrew",
+    mplusQ2: "Main role in M+",
+    mplusRole1: "Tank", mplusRole2: "Healer", mplusRole3: "DPS", mplusRole4: "Flex (multiple roles)",
+    allQ1: "Describe your activity (raid progress, IO score, PvP rating etc.)",
+    allPh: "Tell us everything you think is relevant...",
+    sectionMotiv: "Motivation",
+    labelMotiv: "Why do you want to join this guild?",
+    motivPh: "Tell us a bit about what you're looking for...",
+    labelContact: "BattleTag / Discord (for contact)",
+    contactPh: "e.g. Andrei#1234 or andrei_wow",
+    submitBtn: "SUBMIT APPLICATION",
+    successTitle: "Application submitted!",
+    successText: "The GM will contact you soon. Good luck with the farm until then!",
+    alertMsg: "Please fill in at least your character name and player type."
+  }
+};
+
+let lang = 'ro';
+let selectedRole = null;
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('lang-screen').style.display = 'none';
+  document.getElementById('form-screen').style.display = 'block';
+  applyTranslations();
+}
+
+function goBack() {
+  document.getElementById('form-screen').style.display = 'none';
+  document.getElementById('lang-screen').style.display = 'flex';
+}
+
+function applyTranslations() {
+  const t = T[lang];
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (t[key]) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    const key = el.getAttribute('data-ph');
+    if (t[key]) el.placeholder = t[key];
+  });
+  document.querySelectorAll('[data-t-opt]').forEach(el => {
+    const key = el.getAttribute('data-t-opt');
+    if (t[key]) el.textContent = t[key];
+  });
+}
+
+function selectRole(el) {
+  document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedRole = el.dataset.role;
+  updateCondBlocks();
+}
+
+function updateCondBlocks() {
+  const blocks = ['heroic','mythic','pvp','mplus','all'];
+  blocks.forEach(b => document.getElementById('block-'+b).classList.remove('visible'));
+  if (selectedRole && selectedRole !== 'casual') {
+    const el = document.getElementById('block-'+selectedRole);
+    if (el) el.classList.add('visible');
+  }
+}
+
+async function submitApp() {
+  const name = document.getElementById('char-name').value.trim();
+  if (!name || !selectedRole) {
+    alert(T[lang].alertMsg);
+    return;
+  }
+
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  const data = {
+    language: lang,
+    character_name: name,
+    server: document.getElementById('char-server').value,
+    class: document.getElementById('char-class').value,
+    item_level: document.getElementById('char-ilvl').value,
+    spec: document.getElementById('char-spec').value,
+    role: document.getElementById('char-role').value,
+    player_type: selectedRole,
+    exp_heroic: document.getElementById('exp-heroic').value,
+    heroic_lead: document.getElementById('heroic-lead').value,
+    exp_mythic: document.getElementById('exp-mythic').value,
+    logs_link: document.getElementById('logs-link').value,
+    mythic_schedule: document.getElementById('mythic-sched').value,
+    pvp_format: document.getElementById('pvp-format').value,
+    pvp_rating: document.getElementById('pvp-rating').value,
+    mplus_score: document.getElementById('mplus-score').value,
+    mplus_role: document.getElementById('mplus-role').value,
+    exp_all: document.getElementById('exp-all').value,
+    motivation: document.getElementById('motivation').value,
+    contact: document.getElementById('btag').value,
+  };
+
+  try {
+    const res = await fetch('https://formspree.io/f/mgodwegj', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      document.getElementById('form-screen').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      applyTranslations();
+    } else {
+      btn.textContent = T[lang].submitBtn;
+      btn.disabled = false;
+      alert('Eroare la trimitere. Încearcă din nou.');
+    }
+  } catch(e) {
+    btn.textContent = T[lang].submitBtn;
+    btn.disabled = false;
+    alert('Eroare la trimitere. Verifică conexiunea.');
+  }
+}
+</script>
+</body>
+</html>
